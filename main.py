@@ -12,4 +12,9 @@ async def on_message(message):
     if message.content.startswith("경민아"):
         await message.channel.send("저 바빠유 이따 연락해유!")
 
+    if message.content.startswith("풀었어"):
+        await message.channel.send("뻥치지마유!")
+
+    
+
 client.run(token)
