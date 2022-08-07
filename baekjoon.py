@@ -2,7 +2,6 @@ import http.client
 import random
 import json
 import discord
-import requests
 
 def get_profile_by_id(id):
     conn = http.client.HTTPSConnection("solved.ac")
@@ -22,7 +21,7 @@ async def on_message(message):
         if len(args)==1 and args[0]=='문제줘':
             await message.reply(f'{random.randint(1001, 25000)} {random.randint(1001, 25000)} {random.randint(1001, 25000)}')
 
-        if len(args)==2 and (args[1]=='티어' or args[1]=='정보'):
+        if len(args)==2 and (args[1]=='티어' or args[1]=='정보' or args[1]=='프로필'):
             data=get_profile_by_id(args[0])
 
             embed=discord.Embed(title=args[0])
