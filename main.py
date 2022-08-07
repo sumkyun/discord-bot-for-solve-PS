@@ -1,7 +1,10 @@
 import discord
+import baekjoon
 
 client = discord.Client()
-token = "MTAwNTA2MjY5NTY5MjgwNDExNg.GLD2Yn.6fISZrU6AsTeYp8P5lqGhMW2MwrBA-0-JFPgkg"
+token = r"MTAwNTA2MjY5NTY5MjgwNDExNg.G9RYlh."+r"CU5qa5mrYWGzK6jDE5MnS8erx-fUjhu2l0wKgI"
+# token = r'OTkwMTM1MzExNTc1MTc5MzI1.GnE7Uj.n'+r'G-F7r3uXCYHgqbEs2nXwo8r0GBHT7Y6j_6Nsc'
+
 
 @client.event
 async def on_ready():
@@ -9,12 +12,9 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.content.startswith("경민아"):
-        await message.channel.send("저 바빠유 이따 연락해유!")
+    if message.author == client.user:
+            return
+    await baekjoon.on_message(message)
 
-    if message.content.startswith("풀었어"):
-        await message.channel.send("뻥치지마유!")
-
-    
 
 client.run(token)
