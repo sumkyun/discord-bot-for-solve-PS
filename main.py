@@ -2,7 +2,7 @@ import discord
 import loltier
 
 client = discord.Client()
-token = "MTAwNTA2MjY5NTY5MjgwNDExNg.G9RYlh.CU5qa5mrYWGzK6jDE5MnS8erx-fUjhu2l0wKgI"
+token = "토큰"
 
 @client.event
 async def on_ready():
