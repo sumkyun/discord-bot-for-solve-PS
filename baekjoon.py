@@ -43,7 +43,7 @@ async def on_message(message):
             
             # 세 문제 정하기
             if len(args)==1 and args[0]=='문제줘':
-                today=datetime.today(timezone('Asia/Seoul')).strftime(r"%Y%m%d")
+                today=datetime.now(timezone('Asia/Seoul')).strftime(r"%Y%m%d")
                 messages=[m async for m in message.guild.get_channel(bot_log).history(limit=1)]
                 if messages[0].content==today:
                     await message.reply('아까 알려줬자나유!', embed=messages[0].embeds[0])
