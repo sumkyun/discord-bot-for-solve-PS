@@ -4,8 +4,7 @@ import discord
 import datetime
 
 tier_image_urls=[None]+['https://media.discordapp.net/attachments/1006707877400031283/1006719572541460611/1.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006719572918939740/2.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006719573283831878/3.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006719573661339668/4.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006719574189813880/5.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006719574747660308/6.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006719575318073465/7.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006719575825592350/8.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006719576320528454/9.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006719576769310850/10.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835716241772635/11.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835716573106247/12.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835716900270200/13.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835717168713778/14.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835717856563200/15.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835718263422976/16.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835718682845235/17.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835719001604127/18.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835719383302154/19.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835719773360158/20.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835800291422219/21.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835800786337822/22.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835801075753000/23.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835801419690015/24.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835801738444800/25.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835802090774558/26.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835802455683162/27.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835802799607848/28.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835803181297674/29.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835803600719892/30.png?width=397&height=508','https://media.discordapp.net/attachments/1006707877400031283/1006835825843118150/31.png?width=397&height=508']
-bot_log=1006707877400031283 # 앵글리에
-# bot_log=1006710158417727633 # 내거
+bot_log=1006707877400031283 # 앵글리에의 기억
 
 
 def get_profile_by_id(id):
@@ -16,10 +15,10 @@ def get_profile_by_id(id):
     data = res.read()
     return json.loads(data.decode("utf-8"))
 
-def get_problems():
+def get_problems_from_query(query):
     conn = http.client.HTTPSConnection("solved.ac")
     headers = { 'Content-Type': "application/json" }
-    conn.request("GET", r"/api/v3/search/problem?query=*s2..p5%20s%23100..%20lang%3Ako%20solvable%3Atrue%20!s%40kkhmsg30%20!s%40tndyd0706%20!s%40dandelion51&page=1&sort=random", headers=headers)
+    conn.request("GET", r"/api/v3/search/problem?query="+query, headers=headers)
     res = conn.getresponse()
     data = res.read()
     return json.loads(data.decode("utf-8"))
@@ -48,11 +47,17 @@ async def on_message(message):
                 if messages[0].content==today:
                     await message.reply('아까 알려줬자나유!', embed=messages[0].embeds[0])
                 else:
-
-                    data=get_problems()
-                    embed=discord.Embed(title='오늘의 문제', description=f"""**{data['items'][0]['titleKo']}** - [{data['items'][0]['problemId']}](https://www.acmicpc.net/problem/{data['items'][0]['problemId']})
-                    **{data['items'][1]['titleKo']}** - [{data['items'][1]['problemId']}](https://www.acmicpc.net/problem/{data['items'][1]['problemId']})
-                    **{data['items'][2]['titleKo']}** - [{data['items'][2]['problemId']}](https://www.acmicpc.net/problem/{data['items'][2]['problemId']})""")
+                    problems=[]
+                    data=get_problems_from_query(r'*s2..g5%20s%23100..%20lang%3Ako%20solvable%3Atrue%20!s%40kkhmsg30%20!s%40tndyd0706%20!s%40dandelion51&page=1&sort=random')
+                    problems.append((data['items'][0]['titleKo'],data['items'][0]['problemId']))
+                    data=get_problems_from_query(r'*g4..g2%20s%23100..%20lang%3Ako%20solvable%3Atrue%20!s%40kkhmsg30%20!s%40tndyd0706%20!s%40dandelion51&page=1&sort=random')
+                    problems.append((data['items'][0]['titleKo'],data['items'][0]['problemId']))
+                    data=get_problems_from_query(r'*s2..p5%20s%23100..%20lang%3Ako%20solvable%3Atrue%20!s%40kkhmsg30%20!s%40tndyd0706%20!s%40dandelion51&page=1&sort=random')
+                    problems.append((data['items'][0]['titleKo'],data['items'][0]['problemId']))
+                    problems.sort()
+                    embed=discord.Embed(title='오늘의 문제', description=f"""**{problems[0][0]}** - [{problems[0][1]}](https://www.acmicpc.net/problem/{problems[0][1]})
+                    **{problems[1][0]}** - [{problems[1][1]}](https://www.acmicpc.net/problem/{problems[1][1]})
+                    **{problems[2][0]}** - [{problems[2][1]}](https://www.acmicpc.net/problem/{problems[2][1]})""")
 
                     await message.guild.get_channel(bot_log).send(today, embed=embed)
                     await message.reply(embed=embed)
